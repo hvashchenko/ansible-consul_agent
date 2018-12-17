@@ -1,1 +1,3 @@
-# ansible-consul_agent
+## RUN
+
+Run the comand ```sudo ansible-playbook start.yml``` 
