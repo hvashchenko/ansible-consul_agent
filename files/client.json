@@ -1,0 +1,19 @@
+{
+    "bind_addr": "192.168.2.157",
+    "node_name": "ansible-tantalum",
+    "server": false,
+    "node_meta" : {
+      "name": "Consul client"
+    },
+    "log_level": "INFO",
+    "enable_syslog": true,
+    "datacenter": "server",
+    "data_dir": "/var/consul",
+    "encrypt": "0FPrrsaaeBjUT9VR9RZfkA==",
+    "rejoin_after_leave": true,
+    "retry_join":[
+        "192.168.2.153:8301"
+        ]
+}
+
+

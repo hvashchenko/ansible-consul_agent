@@ -1,0 +1,38 @@
+---
+- hosts: ubuntu 
+  sudo: yes
+  vars:
+    files_dir: /home/tantalum/ansible-consul/files 
+  tasks:
+    - name: install apache2
+      apt: name=apache2 update_cache=yes state=latest
+
+    - name: enabled mod_rewrite
+      apache2_module: name=rewrite state=present
+      notify:
+        - restart apache2
+
+    - name: apache2 listen on port 8081
+      lineinfile: dest=/etc/apache2/ports.conf regexp="^Listen 80" line="Listen 8081" state=present
+      notify:
+        - restart apache2
+
+    - name: apache2 virtualhost on port 8081
+      lineinfile: dest=/etc/apache2/sites-available/000-default.conf regexp="^<VirtualHost \*:80>" line="<VirtualHost *:8081>" state=present
+      notify:
+        - restart apache2
+   
+    - name: apache2 exp
+      lineinfile: dest=/etc/apache2/apache2.conf regexp="^IncludeOptional sites-enabled/*.conf"  line="#IncludeOptional sites-enabled/*.conf" state=present
+      notify:
+        - restart apache2
+
+    - name: copy html
+      copy: src="{{files_dir}}/index.html" dest=/var/www/html/index.html
+      notify:
+        - restart apache2     
+
+            
+  handlers:
+    - name: restart apache2
+      systemd: name=apache2 state=restarted

@@ -1,0 +1,43 @@
+---
+- name: Install consul
+  hosts: ubuntu
+  vars:
+   files_dir: /home/tantalum/ansible-consul/files
+  become: true
+  
+  tasks:
+  - name: Download Consul x64
+    become: true
+    get_url: 
+     url: https://releases.hashicorp.com/consul/1.4.0/consul_1.4.0_linux_amd64.zip
+     dest: /usr/local/bin
+
+  - name: Download Unzip
+    become: true
+    apt: name=unzip state=present
+  
+  - name: unzip consul
+    command: unzip /usr/local/bin/consul_1.4.0_linux_amd64.zip -d /usr/local/bin creates=/usr/local/bin/consul
+
+  - name: log consul
+    command: mkdir /var/log/consul creates=/var/log/consul
+ 
+  - name: body consul
+    become: true
+    command: mkdir /etc/consul.d/client creates=/etc/consul.d/client
+  
+  - name: Make Consul a service
+    become: true
+    copy: src={{ files_dir }}/consul.service dest=/etc/systemd/system/consul.service
+    notify:
+     - restart consul 
+  
+  - name: Make Consul a client
+    become: true
+    copy: src={{ files_dir }}/client.json dest=/etc/consul.d/client/consul.json
+    notify:
+     - restart consul     
+
+  handlers:
+    - name: restart consul 
+      systemd: name=consul.service state=restarted

@@ -1,0 +1,16 @@
+---
+- hosts: ubuntu 
+  sudo: yes
+  tasks:
+  - name: Install python-consul module
+    pip:
+     name: python-consul
+     state: present        
+  - name: apache2
+    consul:
+     service_name: apache2
+     service_port: 8081
+     tags:
+       - prod
+       - webservice
+
