@@ -1,5 +1,5 @@
 {
-    "bind_addr": "192.168.2.157",
+    "bind_addr": "XX.XX.XX.XX",
     "node_name": "ansible-tantalum",
     "server": false,
     "node_meta" : {
@@ -12,7 +12,7 @@
     "encrypt": "0FPrrsaaeBjUT9VR9RZfkA==",
     "rejoin_after_leave": true,
     "retry_join":[
-        "192.168.2.153:8301"
+        "XX.XX.XX.XX:8301"
         ]
 }
 
